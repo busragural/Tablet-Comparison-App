@@ -8,9 +8,9 @@ import firebase_operations
 
 baseUrl = "https://www.vatanbilgisayar.com/tabletler/"
 header = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                  "AppleWebKit/537.36 (KHTML, like Gecko) "
-                  "Chrome/118.0.0.0 Safari/537.36"
+    "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+                 "AppleWebKit/537.36 (KHTML, like Gecko) "
+                 "Chrome/119.0.0.0 Safari/537.36"
 }
 
 tablets = []
@@ -40,11 +40,10 @@ for pageNum in range(1, 2):
                 "Photo" : tabletHtml.find("a",  {"data-fancybox": "images"}).get("href", {}),
                 "Attribute" : tabletAttributes
             }
-            print(tablet["Code"])
+            print(tablet["Name"], tablet["Code"])
             tablets.append(tablet)
 
 
-# Her bir tablet için verileri Firestore koleksiyonuna ekleyin
 for tablet in tablets:
     firebase_operations.add_tablet_to_firestore(tablet, 'V')
     print("bitti")

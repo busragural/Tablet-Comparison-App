@@ -8,22 +8,15 @@ def initialize_firestore(cred_path):
     return firestore.Client.from_service_account_json(cred_path)
 
 
-
-# def is_tablet_exists(tablets_ref, field_name, field_value):
-#     # Belirtilen alan adına ve değerine sahip bir tablet var mı kontrol et
-#     query = tablets_ref.where(field_name, '==', field_value).limit(1)
-#     result = query.stream()
-#     return len(list(result)) > 0
-
 def is_tablet_exists(tablet_name, tablets_ref):
     for document in tablets_ref.stream():
         data = document.to_dict()  # Firestore belgesinin verilerini al
         code = data.get('product_code')  # 'code' yerine 'product_code' kullan
         if code and code in tablet_name:
             print("code", code)
-            return  #true değil kodu döndür
-    return False
-
+            print("doc_id değeri: ",document.id)
+            return document.id  #true değil kodu döndür
+    return None
 
 
 def add_tablet_to_firestore(tablet, site):
@@ -41,15 +34,15 @@ def add_tablet_to_firestore(tablet, site):
     isExist = is_tablet_exists(name, tablets_ref)
     if isExist:
         # Belirli bir ürün adına sahip tablet zaten varsa yeni bir fiyat ekleyin
-        existing_tablet = tablets_ref.where('product_name', '==', name).limit(1).stream().next() #yanlis
-        existing_tablet_id = existing_tablet.id
-
+        #existing_tablet = tablets_ref.where('product_name', '==', name).limit(1).stream().next() #yanlis
+        #existing_tablet_id = existing_tablet.id
+        print("daha oncekini buldu, ref tablosuna ekleyecek")
         prices_ref.add({
-            'tablet_id': existing_tablet_id,
+            'tablet_id': isExist,
             'site': site,
             'price': price
         })
-
+    
         return 
 
     tablets_doc_ref = tablets_ref.add({

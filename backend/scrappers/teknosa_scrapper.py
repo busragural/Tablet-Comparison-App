@@ -5,14 +5,17 @@ import sys
 sys.path.append( 'backend' ) 
 import firebase_operations
 
+
 baseUrl = "https://www.teknosa.com/tablet-c-116012"
 header = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+    "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+                 "AppleWebKit/537.36 (KHTML, like Gecko) "
+                 "Chrome/119.0.0.0 Safari/537.36"
 }
 
 
 tablets = []
-for pageNum in range(0, 10):
+for pageNum in range(0, 1):
     httpRequest = requests.get(f"{baseUrl}/?page={pageNum}", headers=header)
     parsedHtml = BeautifulSoup(httpRequest.text, "html.parser")
     tabletArr = parsedHtml.find_all("div", {"id": "product-item"})
@@ -39,7 +42,7 @@ for pageNum in range(0, 10):
                 "Name" : tabletHtml.find("h1", {"class": "pdp-title"}).get_text(strip=True),
                 "Price" : tabletHtml.find("span", {"class": "prc prc-last"}).text.strip(),
                 "Photo" : tabletHtml.find("div", {"class": "swiper-slide responsive-image-swiper-slide"})["data-zoom"],
-                "Attributes" : attributes_list
+                "Attribute" : attributes_list
             }
             tablets.append(tablet)
 
