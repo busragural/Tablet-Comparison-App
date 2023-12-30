@@ -1,8 +1,6 @@
 import requests
 import pandas as pd
-from bs4 import BeautifulSoup
-import sys
-sys.path.append('backend') 
+from bs4 import BeautifulSoup 
 import firebase_operations
 
 baseUrl = "https://www.vatanbilgisayar.com/tabletler/"
