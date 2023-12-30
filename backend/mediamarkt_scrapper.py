@@ -30,9 +30,11 @@ for pageNum in range(1, 2):
 
             tablet = {
                 "Name": tabletHtml.find("h1", {}).text.strip(),
-                "Photo": tabletHtml.find("img", {"class":"img-preview"}).get("src"),
+                "Photo": 'https:'+tabletHtml.find("img", {"class":"img-preview"}).get("src"),
                 "Price" : None,
-                "Attribute": []
+                "Attribute": [],
+                "ScreenSize": None,
+                "Link": mainPageUrl+tabletHref
                 
             }
             price_meta_tag = tabletHtml.find("meta", {"itemprop": "price"})
@@ -49,11 +51,14 @@ for pageNum in range(1, 2):
                         dd_text = dd.text.strip()
                         attribute = {dt_text: dd_text}  # Create a dictionary for each attribute
                         tablet["Attribute"].append(attribute)
-           
-            print(tablet["Name"])
+            
+            screen_size_value = next((attr['Ekran Boyutu (inç):'].replace('inç', '').strip() for attr in tablet["Attribute"] if 'Ekran Boyutu (inç):' in attr), None)
+            tablet["ScreenSize"] = screen_size_value
+
+            print(tablet["Photo"])
             tablets.append(tablet)
 
 for tablet in tablets:
-    firebase_operations.add_tablet_to_firestore(tablet, 'M')
+    firebase_operations.add_tablet_to_firestore(tablet, 'MediaMarkt')
     print("bitti")
             
