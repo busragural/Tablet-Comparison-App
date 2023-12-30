@@ -1,8 +1,6 @@
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
-import sys
-sys.path.append('backend') 
 import firebase_operations
 
 baseUrl = "https://www.vatanbilgisayar.com/tabletler/"
@@ -53,7 +51,6 @@ for pageNum in range(1, 2):
             print(tablet["Price"] )
             tablets.append(tablet)
      
-
 for tablet in tablets:
     firebase_operations.add_tablet_to_firestore(tablet, 'Vatan')
     print("bitti")

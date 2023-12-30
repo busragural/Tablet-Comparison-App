@@ -1,10 +1,7 @@
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
-import sys
-sys.path.append( 'backend' ) 
 import firebase_operations
-
 
 baseUrl = "https://www.teknosa.com/tablet-c-116012"
 header = {
@@ -12,7 +9,6 @@ header = {
                  "AppleWebKit/537.36 (KHTML, like Gecko) "
                  "Chrome/119.0.0.0 Safari/537.36"
 }
-
 
 tablets = []
 for pageNum in range(0, 1):
