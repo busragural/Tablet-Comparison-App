@@ -1,6 +1,6 @@
 import requests
 import pandas as pd
-from bs4 import BeautifulSoup 
+from bs4 import BeautifulSoup
 import firebase_operations
 
 baseUrl = "https://www.vatanbilgisayar.com/tabletler/"
@@ -32,17 +32,25 @@ for pageNum in range(1, 2):
                     key = columns[0].text.strip()
                     value = columns[1].find("p").text.strip()  
                     tabletAttributes[key] = value
+            screen_size_value = tabletAttributes.get('Ekran Boyutu', '')
+            screen_size_value = screen_size_value.replace('inch', '').strip()
+
+            price_text = tabletHtml.find("span", {"class": "product-list__price"}).text.strip()
+            price_value = price_text.replace('.', '').strip()
+
             tablet = {
                 "Name": tabletHtml.find("h1", {"class": "product-list__product-name"}).text.strip(),
-                "Code" : tabletHtml.find("div", {"class" : "product-list__product-code pull-left product-id"}).text.split("/")[0].strip(),
-                "Price": tabletHtml.find("span", {"class": "product-list__price"}).text.strip(),
+                #"Code" : tabletHtml.find("div", {"class" : "product-list__product-code pull-left product-id"}).text.split("/")[0].strip(),
+                "Price": price_value,
                 "Photo" : tabletHtml.find("a",  {"data-fancybox": "images"}).get("href", {}),
-                "Attribute" : tabletAttributes
+                "Attribute" : tabletAttributes,
+                "ScreenSize": screen_size_value,
+                "Link" : baseUrl + link["href"]
             }
-            print(tablet["Name"], tablet["Code"])
+
+            print(tablet["Price"] )
             tablets.append(tablet)
      
-
 for tablet in tablets:
-    firebase_operations.add_tablet_to_firestore(tablet, 'V')
+    firebase_operations.add_tablet_to_firestore(tablet, 'Vatan')
     print("bitti")

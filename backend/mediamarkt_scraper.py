@@ -1,10 +1,7 @@
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
-import sys
-sys.path.append( 'backend' ) 
 import firebase_operations
-
 
 baseUrl = "https://www.mediamarkt.com.tr/tr/category/_tabletler-639520.html"
 mainPageUrl = "https://www.mediamarkt.com.tr"
@@ -13,7 +10,6 @@ header = {
                  "AppleWebKit/537.36 (KHTML, like Gecko) "
                  "Chrome/119.0.0.0 Safari/537.36"
 }
-
 
 tablets = []
 for pageNum in range(1, 2):
@@ -30,9 +26,11 @@ for pageNum in range(1, 2):
 
             tablet = {
                 "Name": tabletHtml.find("h1", {}).text.strip(),
-                "Photo": tabletHtml.find("img", {"class":"img-preview"}).get("src"),
+                "Photo": 'https:'+tabletHtml.find("img", {"class":"img-preview"}).get("src"),
                 "Price" : None,
-                "Attribute": []
+                "Attribute": [],
+                "ScreenSize": None,
+                "Link": mainPageUrl+tabletHref
                 
             }
             price_meta_tag = tabletHtml.find("meta", {"itemprop": "price"})
@@ -49,11 +47,13 @@ for pageNum in range(1, 2):
                         dd_text = dd.text.strip()
                         attribute = {dt_text: dd_text}  # Create a dictionary for each attribute
                         tablet["Attribute"].append(attribute)
-           
-            print(tablet["Name"])
+            
+            screen_size_value = next((attr['Ekran Boyutu (inç):'].replace('inç', '').strip() for attr in tablet["Attribute"] if 'Ekran Boyutu (inç):' in attr), None)
+            tablet["ScreenSize"] = screen_size_value
+
+            print(tablet["Photo"])
             tablets.append(tablet)
 
 for tablet in tablets:
-    firebase_operations.add_tablet_to_firestore(tablet, 'M')
+    firebase_operations.add_tablet_to_firestore(tablet, 'MediaMarkt')
     print("bitti")
-            
