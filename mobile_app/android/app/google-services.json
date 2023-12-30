@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "827641304531",
+    "project_id": "tablet-comparison-app",
+    "storage_bucket": "tablet-comparison-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827641304531:android:c6a4095dced236e4e24b26",
+        "android_client_info": {
+          "package_name": "com.example.mobile_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJKBSJ0sS2KB2-7jZkKgtMrhKiFoNfJdw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
