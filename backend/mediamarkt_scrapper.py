@@ -31,11 +31,13 @@ for pageNum in range(1, 2):
             tablet = {
                 "Name": tabletHtml.find("h1", {}).text.strip(),
                 "Photo": tabletHtml.find("img", {"class":"img-preview"}).get("src"),
-                "Price" : tabletHtml.find("meta", {"itemprop": "price"})["content"],
+                "Price" : None,
                 "Attribute": []
                 
             }
-
+            price_meta_tag = tabletHtml.find("meta", {"itemprop": "price"})
+            if price_meta_tag:
+                tablet["Price"] = price_meta_tag.get("content")       
             sections = tabletHtml.find_all("section")
             for section in sections:
                 h2 = section.find("h2")

@@ -2,9 +2,8 @@ import requests
 import pandas as pd
 from bs4 import BeautifulSoup
 import sys
-sys.path.append( 'backend' ) 
+sys.path.append('backend') 
 import firebase_operations
-
 
 baseUrl = "https://www.vatanbilgisayar.com/tabletler/"
 header = {
@@ -14,12 +13,14 @@ header = {
 }
 
 tablets = []
+inverted_index = {}
+
 for pageNum in range(1, 2):
     httpRequest = requests.get(f"{baseUrl}/?page={pageNum}", headers=header)
     parsedHtml = BeautifulSoup(httpRequest.text, "html.parser")
     tabletArr = parsedHtml.find_all("div", {"class": "product-list product-list--list-page"})
 
-    for iterTablet in tabletArr:
+    for index, iterTablet in enumerate(tabletArr):
         for link in iterTablet.find_all("a", {"class": "product-list__image-safe-link sld"}):
             tabletReq = requests.get(baseUrl + link["href"], headers=header)
             tabletHtml = BeautifulSoup(tabletReq.text, "html.parser")
@@ -42,7 +43,7 @@ for pageNum in range(1, 2):
             }
             print(tablet["Name"], tablet["Code"])
             tablets.append(tablet)
-
+     
 
 for tablet in tablets:
     firebase_operations.add_tablet_to_firestore(tablet, 'V')

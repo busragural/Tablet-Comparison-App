@@ -15,7 +15,7 @@ header = {
 
 
 tablets = []
-for pageNum in range(0, 1):
+for pageNum in range(0, 2):
     httpRequest = requests.get(f"{baseUrl}/?page={pageNum}", headers=header)
     parsedHtml = BeautifulSoup(httpRequest.text, "html.parser")
     tabletArr = parsedHtml.find_all("div", {"id": "product-item"})
