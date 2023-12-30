@@ -1,12 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/product/constants/texts/screen_texts.dart';
 import 'package:mobile_app/product/constants/utils/color_constants.dart';
 import 'package:mobile_app/product/constants/utils/padding_constants.dart';
 import 'package:mobile_app/product/constants/utils/text_styles.dart';
+import 'package:mobile_app/product/models/tablet_model.dart';
 import 'package:mobile_app/product/widget/custom_search_bar.dart';
 import 'package:mobile_app/product/widget/filter_component/filter_bottom_sheet.dart';
 import 'package:mobile_app/product/widget/tablet_card.dart';
 import 'package:mobile_app/product/widget/update_bottom_sheet.dart';
+import 'package:mobile_app/services/firestore.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -16,6 +19,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final FirestoreService firestoreService = FirestoreService();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -88,20 +93,41 @@ class _HomeViewState extends State<HomeView> {
               ),
               Expanded(
                 flex: 14,
-                child: ListView.builder(
-                  itemCount: 7,
-                  itemBuilder: (BuildContext context, int index) {
-                    return const Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: TabletCard(
-                        imageUrl:
-                            "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTp_w3Y6oO4Cwac1agH0yqvp9nii0wlRF_aUWlNQyciiNarWd3Xpq0WfSx7xcwmCsvopAi3TQF_GpblmFrPbC1nhk0Zv1pbhkKNrFoJ_4UYT7w3q11Oh6QZdA&usqp=CAE",
-                        tabletModel:
-                            "Apple iPad 10. Nesil 10.9\" Wifi 64GB Mavi Tablet MPQ13TU/A",
-                        ownerWebsite: "Teknosa",
-                        price: 11999,
-                      ),
-                    );
+                child: StreamBuilder(
+                  stream: firestoreService.getTabletsStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Something went wrong');
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Text("Loading");
+                    }
+
+                    if (snapshot.hasData) {
+                      List tabletList = snapshot.data!.docs;
+                      return ListView.builder(
+                        itemCount: tabletList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          DocumentSnapshot document = tabletList[index];
+                          Map<String, dynamic> data =
+                              document.data() as Map<String, dynamic>;
+                          TabletModel tablet = TabletModel.fromJson(data);
+                          tablet.setId(document.id);
+                          return Padding(
+                            padding: EdgeInsets.only(top: 8),
+                            child: TabletCard(
+                              imageUrl: tablet.img,
+                              tabletModel: tablet.name,
+                              ownerWebsite: tablet.site,
+                              price: tablet.price,
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      return const Text("Tablet bulunamadı");
+                    }
                   },
                 ),
               ),

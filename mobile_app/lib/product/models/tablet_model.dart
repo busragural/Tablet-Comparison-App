@@ -3,35 +3,41 @@
 class TabletModel {
   late final String _id;
   late final String _name;
-  late final String _photoUrl;
-  late double _lowPrice;
+  late final String _link;
+  late final String _site;
+  late final String _screenSize;
+  late final String _img;
+  late double _price;
 
-  TabletModel({required String id, required String name, required String photoUrl, required double price}) {
-      _name = name;
-      _name = name;
-      _photoUrl = photoUrl;
-      _lowPrice = price;
-  }
+  TabletModel();
 
   String get id => _id;
+  void setId(String id) => _id = id;
   String get name => _name;
-  String get photoUrl => _photoUrl;
-  double get price => _lowPrice;
-  set price(double price) => _lowPrice = price;
+  String get link => _link;
+  String get site => _site;
+  String get screenSize => _screenSize;
+  String get img => _img;
+  double get price => _price;
+  set price(double price) => _price = price;
 
   TabletModel.fromJson(Map<String, dynamic> json) {
-    _name = json['id'];
-    _name = json['name'];
-    _photoUrl = json['photoUrl'];
-    _lowPrice = json['price'];
+    _name = json['product_name'];
+    _link = json['link'];
+    _site = json['site'];
+    _screenSize = json['screenSize'];
+    _img = json['product_img'];
+    _price = json['product_price'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = _id;
-    data['name'] = _name;
-    data['photoUrl'] = _photoUrl;
-    data['price'] = _lowPrice;
+    data['product_name'] = _name;
+    data['link'] = _link;
+    data['site'] = _site;
+    data['screenSize'] = _screenSize;
+    data['product_img'] = _img;
+    data['product_price'] = _price;
     return data;
   }
 }
