@@ -8,14 +8,14 @@ import '../constants/utils/color_constants.dart';
 class TabletCard extends StatelessWidget {
   final String imageUrl;
   final String tabletModel;
-  final String leastPriceSite;
+  final String ownerWebsite;
   final double price;
 
   const TabletCard({
     super.key,
     required this.imageUrl,
     required this.tabletModel,
-    required this.leastPriceSite,
+    required this.ownerWebsite,
     required this.price,
   });
   @override
@@ -64,14 +64,14 @@ class TabletCard extends StatelessWidget {
                   Row(
                     children: [
                       const Text(
-                        "En ucuz: ",
+                        "Website: ",
                         style: TextStyle(
                           color: TextColors.HIGHLIGHTED_COLOR,
                           fontSize: 16,
                         ),
                       ),
                       Text(
-                        leastPriceSite,
+                        ownerWebsite,
                         style: const TextStyle(
                           color: TextColors.PRIMARY_COLOR,
                           fontSize: 16,
