@@ -20,6 +20,58 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final FirestoreService firestoreService = FirestoreService();
+  final TextEditingController _searchController = TextEditingController();
+  List _allTablets = [];
+  List _tabletResults = [];
+  int resultCount = 0;
+
+  _searchTablets() {
+    var foundTablets = [];
+
+    if (_searchController.text != "") {
+      for (var tabletSnapshot in _allTablets) {
+        var name = tabletSnapshot["product_name"].toString().toLowerCase();
+        if (name.contains(_searchController.text.toLowerCase())) {
+          foundTablets.add(tabletSnapshot);
+        }
+      }
+    } else {
+      foundTablets = List.from(_allTablets);
+    }
+
+    setState(() {
+      _tabletResults = foundTablets;
+      resultCount = foundTablets.length;
+    });
+  }
+
+  getTabletStream() async {
+    var data = await firestoreService.getTablets();
+    setState(() {
+      _allTablets = data.docs;
+    });
+    _searchTablets();
+  }
+
+  @override
+  void initState() {
+    _searchController.addListener(_searchTablets);
+
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    getTabletStream();
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_searchTablets);
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +120,10 @@ class _HomeViewState extends State<HomeView> {
                 flex: 2,
                 child: Row(
                   children: [
-                    const Expanded(
-                      child: CustomSearchBar(),
+                    Expanded(
+                      child: CustomSearchBar(
+                        searchController: _searchController,
+                      ),
                     ),
                     const SizedBox(width: 20),
                     IconButton(
@@ -91,45 +145,34 @@ class _HomeViewState extends State<HomeView> {
                   ],
                 ),
               ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "$resultCount sonuç gösteriliyor...",
+                  style: const TextStyle(
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
               Expanded(
                 flex: 14,
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: firestoreService.getTabletsStream(),
-                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasError) {
-                      return Text('Something went wrong');
-                    }
-
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-
-                    if (snapshot.hasData) {
-                      List tabletList = snapshot.data!.docs;
-                      return ListView.builder(
-                        itemCount: tabletList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          DocumentSnapshot document = tabletList[index];
-                          Map<String, dynamic> data =
-                              document.data() as Map<String, dynamic>;
-                          TabletModel tablet = TabletModel.fromJson(data);
-                          tablet.setId(document.id);
-                          return Padding(
-                            padding: EdgeInsets.only(top: 8),
-                            child: TabletCard(
-                              imageUrl: tablet.img,
-                              tabletModel: tablet.name,
-                              ownerWebsite: tablet.site,
-                              price: tablet.price,
-                            ),
-                          );
-                        },
-                      );
-                    } else {
-                      return const Text("Tablet bulunamadı");
-                    }
+                child: ListView.builder(
+                  itemCount: _tabletResults.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    DocumentSnapshot document = _tabletResults[index];
+                    Map<String, dynamic> data =
+                        document.data() as Map<String, dynamic>;
+                    TabletModel tablet = TabletModel.fromJson(data);
+                    tablet.setId(document.id);
+                    return Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: TabletCard(
+                        imageUrl: tablet.img,
+                        tabletModel: tablet.name,
+                        ownerWebsite: tablet.site,
+                        price: tablet.price,
+                      ),
+                    );
                   },
                 ),
               ),

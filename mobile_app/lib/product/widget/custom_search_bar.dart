@@ -1,9 +1,16 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:mobile_app/product/constants/utils/border_radius_constants.dart';
+
 import '../constants/utils/color_constants.dart';
 
 class CustomSearchBar extends StatefulWidget {
-  const CustomSearchBar({super.key});
+  
+  final TextEditingController searchController;
+  const CustomSearchBar({
+    Key? key,
+    required this.searchController,
+  }) : super(key: key);
 
   @override
   State<CustomSearchBar> createState() => _CustomSearchBarState();
@@ -11,8 +18,6 @@ class CustomSearchBar extends StatefulWidget {
 
 class _CustomSearchBarState extends State<CustomSearchBar> {
   
-  TextEditingController searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +38,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           hintText: "Arama yap...",
           hintStyle: TextStyle(color: TextColors.HINT_COLOR),
         ),
-        controller: searchController,
+        controller: widget.searchController,
       ),
     );
   }

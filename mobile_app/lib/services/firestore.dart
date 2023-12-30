@@ -2,12 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreService {
 
-  final CollectionReference tablets =
+  final CollectionReference _tablets =
       FirebaseFirestore.instance.collection("tablets");
 
-  Stream<QuerySnapshot> getTabletsStream(){
-    
-    final tabletsStrem = tablets.snapshots();
-    return tabletsStrem;
-  }
+  Future<QuerySnapshot> getTablets() => _tablets.get();
 }
