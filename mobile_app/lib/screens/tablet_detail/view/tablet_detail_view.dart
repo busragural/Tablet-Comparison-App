@@ -18,6 +18,7 @@ class TabletDetailView extends BaseStatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          scrolledUnderElevation: 0,
         ),
         body: Padding(
           padding: AppPaddings.MEDIUM_H + AppPaddings.SMALL_V,
@@ -42,58 +43,69 @@ class TabletDetailView extends BaseStatelessWidget {
               ),
               SizedBox(
                 height: dynamicHeightDevice(context, 0.1),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: List.generate(
-                    3,
-                    (index) => InkWell(
-                      overlayColor:
-                          const MaterialStatePropertyAll(Colors.transparent),
-                      onTap: _launchUrl,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: InkWell(
+                  overlayColor:
+                      const MaterialStatePropertyAll(Colors.transparent),
+                  onTap: _launchUrl,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: ButtonColors.PRIMARY_COLOR,
+                      borderRadius: AppBorderRadius.LARGE,
+                    ),
+                    child: Padding(
+                      padding: AppPaddings.SMALL_V + AppPaddings.SMALL_H,
+                      child: Row(
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: ButtonColors.PRIMARY_COLOR,
-                              borderRadius: AppBorderRadius.LARGE,
-                            ),
-                            child: Padding(
-                              padding:
-                                  AppPaddings.SMALL_V + AppPaddings.SMALL_H,
-                              child: const Text(
-                                "Teknosa",
-                                style: TextStyle(
-                                  color: TextColors.BUTTON_TEXT_COLOR,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                          Spacer(),
+                          Expanded(
+                            flex: 8,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Teknosa",
+                                  style: TextStyle(
+                                    color: TextColors.BUTTON_TEXT_COLOR,
+                                    fontSize: dynamicHeightDevice(context, 0.028),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
+                                Text(
+                                  "11.199 TL",
+                                  style: TextStyle(
+                                    color: TextColors.BUTTON_TEXT_COLOR,
+                                    fontSize: dynamicHeightDevice(context, 0.023),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          const Text(
-                            "11.199 TL",
-                            style: TextStyle(
-                              color: TextColors.PRIMARY_COLOR,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Icon(
+                              Icons.add_shopping_cart_rounded,
+                              color: Colors.white,
+                              size: 40,
                             ),
                           ),
+                          Spacer()
                         ],
                       ),
                     ),
                   ),
                 ),
               ),
-              const ColumnDivider(),
               const Padding(
-                padding: AppPaddings.SMALL_V,
-                child: Text(
-                  "Özellikler",
-                  style: TextStyle(
-                    color: TextColors.PRIMARY_COLOR,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                padding: AppPaddings.MEDIUM_V,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Özellikler",
+                    style: TextStyle(
+                      color: TextColors.PRIMARY_COLOR,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
                   ),
                 ),
               ),
@@ -102,31 +114,34 @@ class TabletDetailView extends BaseStatelessWidget {
                 child: ListView.builder(
                   itemCount: 15,
                   itemBuilder: (BuildContext context, int index) {
-                    return const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    return Column(
                       children: [
-                        Expanded(
-                          flex: 9,
-                          child: Text(
-                            "Marka:",
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                              color: TextColors.HIGHLIGHTED_COLOR,
-                              fontSize: 16,
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex: 9,
+                              child: Text(
+                                "Marka:",
+                                style: TextStyle(
+                                  color: TextColors.HIGHLIGHTED_COLOR,
+                                  fontSize: 16,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Spacer(),
-                        Expanded(
-                          flex: 9,
-                          child: Text(
-                            "Apple",
-                            style: TextStyle(
-                              color: TextColors.PRIMARY_COLOR,
-                              fontSize: 16,
+                            Expanded(
+                              flex: 9,
+                              child: Text(
+                                "Apple",
+                                style: TextStyle(
+                                  color: TextColors.PRIMARY_COLOR,
+                                  fontSize: 16,
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
+                        const ColumnDivider(),
                       ],
                     );
                   },

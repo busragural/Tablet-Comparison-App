@@ -6,6 +6,7 @@ import 'package:mobile_app/product/constants/utils/text_styles.dart';
 import 'package:mobile_app/product/widget/custom_search_bar.dart';
 import 'package:mobile_app/product/widget/filter_component/filter_bottom_sheet.dart';
 import 'package:mobile_app/product/widget/tablet_card.dart';
+import 'package:mobile_app/product/widget/update_bottom_sheet.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -20,23 +21,46 @@ class _HomeViewState extends State<HomeView> {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          actions: [
+            IconButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (BuildContext context) {
+                    return const UpdateBottomSheet();
+                  },
+                );
+              },
+              icon: const Icon(
+                Icons.update,
+                color: AssetColors.SECONDARY_COLOR,
+                size: 35,
+              ),
+            ),
+            const SizedBox(
+              width: 5,
+            )
+          ],
+        ),
         body: Padding(
-          padding: AppPaddings.MEDIUM_H + AppPaddings.SMALL_V,
+          padding: AppPaddings.MEDIUM_H + const EdgeInsets.only(bottom: 10),
           child: Column(
             children: [
               const Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: AppPaddings.MEDIUM_H,
-                  child: Center(
-                    child: Text(ScreenTexts.HOME_TEXT,
-                        textAlign: TextAlign.center,
-                        style: TextStyles.HOME_HEADING),
-                  ),
+                flex: 3,
+                child: Center(
+                  child: Text(ScreenTexts.HOME_TEXT,
+                      textAlign: TextAlign.center,
+                      style: TextStyles.HOME_HEADING),
                 ),
               ),
               Expanded(
-                flex: 1,
+                flex: 2,
                 child: Row(
                   children: [
                     const Expanded(
@@ -63,7 +87,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
               Expanded(
-                flex: 7,
+                flex: 14,
                 child: ListView.builder(
                   itemCount: 7,
                   itemBuilder: (BuildContext context, int index) {
@@ -74,7 +98,7 @@ class _HomeViewState extends State<HomeView> {
                             "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTp_w3Y6oO4Cwac1agH0yqvp9nii0wlRF_aUWlNQyciiNarWd3Xpq0WfSx7xcwmCsvopAi3TQF_GpblmFrPbC1nhk0Zv1pbhkKNrFoJ_4UYT7w3q11Oh6QZdA&usqp=CAE",
                         tabletModel:
                             "Apple iPad 10. Nesil 10.9\" Wifi 64GB Mavi Tablet MPQ13TU/A",
-                        leastPriceSite: "Teknosa",
+                        ownerWebsite: "Teknosa",
                         price: 11999,
                       ),
                     );
