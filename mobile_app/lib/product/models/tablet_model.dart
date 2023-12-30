@@ -25,9 +25,9 @@ class TabletModel {
     _name = json['product_name'];
     _link = json['link'];
     _site = json['site'];
-    _screenSize = json['screenSize'];
+    _screenSize = "10";
     _img = json['product_img'];
-    _price = json['product_price'];
+    _price = double.parse(json['product_price'].toString().split(' ')[0].replaceAll(".", ""));
   }
 
   Map<String, dynamic> toJson() {
