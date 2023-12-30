@@ -57,3 +57,4 @@ for pageNum in range(1, 2):
 for tablet in tablets:
     firebase_operations.add_tablet_to_firestore(tablet, 'MediaMarkt')
     print("bitti")
+            
