@@ -76,17 +76,17 @@ def create_collections_with_initial_data(db):
     inverted_index_ref = db.collection('inverted_index')
 
     # Create initial document for 'inverted_index' with a field 'tablets_id'
-    inverted_index_ref.add({'tablets_id': None})
+    inverted_index_ref.add({'tablets_id': "test"})
 
     # Create initial documents for 'tablets' with null values for string fields and 0 for product_price
     tablets_ref.add({
-        'product_name': None,
-        'product_img': None,
-        'product_attr': None,
-        'site': None,
+        'product_name': "test",
+        'product_img': "test",
+        'product_attr': "test",
+        'site': "test",
         'product_price': 0,
-        'link': None,
-        'screenSize': None
+        'link': "test",
+        'screenSize': "test"
     })
 
 if __name__ == "__main__":

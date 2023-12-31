@@ -95,7 +95,7 @@ class _HomeViewState extends State<HomeView> {
                 //   },
                 // );
                 setState(() {
-                  flaskService.runScraper('mediamarkt');
+                  flaskService.runScraper('vatan');
                 });
               },
               icon: const Icon(
