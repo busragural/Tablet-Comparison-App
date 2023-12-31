@@ -104,3 +104,16 @@ def add_tablet_to_firestore(tablet, site):
 
             size_doc_ref.set(current_index)
     
+    query = tablets_ref.where('product_name', '==', 'test')
+    tablets = query.stream()
+
+    for tablet in tablets:
+        tablet.reference.delete()
+        print(f"Tablet with product_name 'test' deleted.")
+        
+    query = inverted_index_ref.where('tablet_ids', 'array_contains', "test")
+    indices = query.stream()   
+    for index in indices:
+        index.reference.delete()
+        print(f"Index with tablet_id 'test' deleted.")
+    
