@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/core/base/state/base_state.dart';
 import 'package:mobile_app/product/constants/utils/padding_constants.dart';
 import '../constants/utils/color_constants.dart';
+import 'package:mobile_app/services/flask.dart';
 
 class UpdateBottomSheet extends BaseStatelessWidget {
-  const UpdateBottomSheet({super.key});
+  final FlaskService flaskService = FlaskService();
+  UpdateBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +67,9 @@ class UpdateBottomSheet extends BaseStatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            flaskService.runScraper(website);
+          },
           icon: const Icon(
             Icons.update,
             color: ButtonColors.PRIMARY_COLOR,

@@ -9,9 +9,9 @@ def run_scraper():
     scraper_name = data.get('scraper_name')
 
     scraper_scripts = {
-        'mediamarkt': './backend/mediamarkt_scraper.py',
-        'vatan': './backend/vatan_scraper.py',
-        'teknosa': './backend/teknosa_scraper.py',
+        'Mediamarkt': './backend/mediamarkt_scraper.py',
+        'Vatan': './backend/vatan_scraper.py',
+        'Teknosa': './backend/teknosa_scraper.py',
     }
 
     scraper_script = scraper_scripts.get(scraper_name)

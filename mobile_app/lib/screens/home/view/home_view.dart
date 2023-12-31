@@ -10,7 +10,6 @@ import 'package:mobile_app/product/widget/filter_component/filter_bottom_sheet.d
 import 'package:mobile_app/product/widget/tablet_card.dart';
 import 'package:mobile_app/product/widget/update_bottom_sheet.dart';
 import 'package:mobile_app/services/firestore.dart';
-import 'package:mobile_app/services/flask.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -21,7 +20,6 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final FirestoreService firestoreService = FirestoreService();
-  final FlaskService flaskService = FlaskService();
   final TextEditingController _searchController = TextEditingController();
   List _allTablets = [];
   List _tabletResults = [];
@@ -87,16 +85,13 @@ class _HomeViewState extends State<HomeView> {
           actions: [
             IconButton(
               onPressed: () {
-                // showModalBottomSheet(
-                //   context: context,
-                //   isScrollControlled: true,
-                //   builder: (BuildContext context) {
-                //     return const UpdateBottomSheet();
-                //   },
-                // );
-                setState(() {
-                  flaskService.runScraper('vatan');
-                });
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (BuildContext context) {
+                    return UpdateBottomSheet();
+                  },
+                );
               },
               icon: const Icon(
                 Icons.update,
