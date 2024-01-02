@@ -48,7 +48,7 @@ for pageNum in range(1, 2):
                 "Link" : baseUrl + link["href"]
             }
 
-            print(tablet["Price"] )
+            print(tablet["ScreenSize"] )
             tablets.append(tablet)
      
 for tablet in tablets:
