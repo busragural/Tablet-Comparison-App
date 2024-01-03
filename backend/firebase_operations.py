@@ -9,7 +9,10 @@ def initialize_firestore(cred_path):
     return firestore.Client.from_service_account_json(cred_path)
 
 def sanitize_string(input_string):
-    return ''.join(char if char.isalnum() or char in {'_', '-'} else '_' for char in input_string)
+    cleaned_string = ''.join(char if char.isalnum() or char in {'_', '-'} else '_' for char in input_string)
+    result_string = cleaned_string + ' inç'
+    return result_string
+
 
 def tablet_exists(name, price, tablets_ref):
     query = tablets_ref.where('product_name', '==', name).where('product_price', '==', price).limit(1)
@@ -38,6 +41,7 @@ def add_tablet_to_firestore(tablet, site):
     price = tablet['Price']
     link = tablet['Link']
     screenSize = tablet['ScreenSize']
+    print("screennnn: ", screenSize)
     #code = tablet.get('Code')
     exists, existing_tablets = tablet_exists(name, price, tablets_ref)
 
@@ -91,19 +95,24 @@ def add_tablet_to_firestore(tablet, site):
             current_index['tablet_ids'].append(tablets_doc_ref[1].id)
 
             word_doc_ref.set(current_index)
-    for size in screenSize:
-        sanitized_size = sanitize_string(size.lower())
-        if sanitized_size:
-            size_doc_ref = inverted_index_ref.document(sanitized_size)
-            current_index = size_doc_ref.get().to_dict()
-            print("test: ", current_index)
-            if current_index is None:
-                current_index = {'tablet_ids': []}
 
-            current_index['tablet_ids'].append(tablets_doc_ref[1].id)
-
-            size_doc_ref.set(current_index)
+    sanitized_size = sanitize_string(screenSize)
+    print("qwe:", sanitized_size)
+    if sanitized_size:
+        size_doc_ref = inverted_index_ref.document(sanitized_size)
+        current_index = size_doc_ref.get().to_dict()
+        if current_index is None:
+            current_index = {'tablet_ids': []}
+        current_index['tablet_ids'].append(tablets_doc_ref[1].id)
+        size_doc_ref.set(current_index)
     
+    site_doc_ref = inverted_index_ref.document(site)
+    current_index = site_doc_ref.get().to_dict()
+    if current_index is None:
+        current_index = {'tablet_ids' : []}
+    current_index['tablet_ids'].append(tablets_doc_ref[1].id)
+    site_doc_ref.set(current_index)
+
     query = tablets_ref.where('product_name', '==', 'test')
     tablets = query.stream()
 
