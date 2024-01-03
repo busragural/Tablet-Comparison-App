@@ -60,7 +60,7 @@ for pageNum in range(0, 1):
             tablets.append(tablet)
 
 for tablet in tablets:
-    firebase_operations.add_tablet_to_firestore(tablet, 'Teknosa')
+    firebase_operations.add_tablet_to_firestore(tablet, 'teknosa')
     print("bitti")
 
 
