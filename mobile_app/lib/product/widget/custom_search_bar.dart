@@ -8,9 +8,9 @@ class CustomSearchBar extends StatefulWidget {
   
   final TextEditingController searchController;
   const CustomSearchBar({
-    Key? key,
+    super.key,
     required this.searchController,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomSearchBar> createState() => _CustomSearchBarState();

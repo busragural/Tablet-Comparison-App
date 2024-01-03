@@ -3,12 +3,12 @@ import 'package:mobx/mobx.dart';
 
 class BaseStatefulView<T extends Store> extends StatefulWidget {
   const BaseStatefulView({
-    Key? key,
+    super.key,
     required this.viewModel,
     required this.onModelReady,
     required this.onPageBuilder,
     this.onDispose,
-  }) : super(key: key);
+  });
   final T viewModel;
   final void Function(T model) onModelReady;
   final Widget Function(BuildContext context, T value) onPageBuilder;

@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/core/base/state/base_state.dart';
 import 'package:mobile_app/product/widget/filter_component/custom_checkbox.dart';
 
+import '../../../screens/home/viewmodel/home_viewmodel.dart';
 import '../../constants/utils/color_constants.dart';
 
 class FilterMultipleCheckbox extends BaseStatelessWidget {
+  final HomeViewModel viewModel;
   final String filterType;
   final List<String> choices;
   const FilterMultipleCheckbox(
-      {required this.filterType, required this.choices, super.key});
+      {required this.viewModel,
+      required this.filterType,
+      required this.choices,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +38,11 @@ class FilterMultipleCheckbox extends BaseStatelessWidget {
             ),
             itemCount: choices.length,
             itemBuilder: (BuildContext context, int index) {
-              return CustomCheckbox(choice: choices[index]);
+              return CustomCheckbox(
+                choice: choices[index],
+                viewModel: viewModel,
+                filterType: filterType,
+              );
             },
           ),
         ),

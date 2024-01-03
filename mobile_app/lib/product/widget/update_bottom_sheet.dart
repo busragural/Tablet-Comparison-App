@@ -1,8 +1,11 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile_app/core/base/state/base_state.dart';
 import 'package:mobile_app/product/constants/utils/padding_constants.dart';
-import '../constants/utils/color_constants.dart';
 import 'package:mobile_app/services/flask.dart';
+
+import '../constants/utils/color_constants.dart';
 
 class UpdateBottomSheet extends BaseStatelessWidget {
   final FlaskService flaskService = FlaskService();
@@ -31,16 +34,33 @@ class UpdateBottomSheet extends BaseStatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            createWebsiteUpdateCard(context, "Teknosa"),
-            createWebsiteUpdateCard(context, "Vatan"),
-            createWebsiteUpdateCard(context, "MediaMarkt"),
+            WebsiteUpdateCard(website: "Mediamarkt", service: flaskService),
+            WebsiteUpdateCard(website: "Vatan", service: flaskService),
+            WebsiteUpdateCard(website: "Teknosa", service: flaskService),
           ],
         ),
       ),
     );
   }
+}
 
-  Row createWebsiteUpdateCard(BuildContext context, String website) {
+class WebsiteUpdateCard extends StatefulWidget {
+  final String website;
+  final FlaskService service;
+  const WebsiteUpdateCard({
+    super.key,
+    required this.website,
+    required this.service,
+  });
+
+  @override
+  State<WebsiteUpdateCard> createState() => _WebsiteUpdateCardState();
+}
+
+class _WebsiteUpdateCardState extends BaseState<WebsiteUpdateCard> {
+  DateTime scrapedTime = DateTime.now().subtract(const Duration(hours: 48));
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
@@ -49,18 +69,18 @@ class UpdateBottomSheet extends BaseStatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                website,
+                widget.website,
                 style: TextStyle(
                   color: TextColors.PRIMARY_COLOR,
-                  fontSize: dynamicHeightDevice(context, 0.03),
+                  fontSize: dynamicHeightDevice(0.03),
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
-                "En son güncelleme: " + "29.12.2023",
+                "En son güncelleme: ${DateFormat('dd-MM-yyyy').format(scrapedTime)}",
                 style: TextStyle(
                   color: TextColors.PRIMARY_COLOR,
-                  fontSize: dynamicHeightDevice(context, 0.015),
+                  fontSize: dynamicHeightDevice(0.015),
                 ),
               ),
             ],
@@ -68,7 +88,10 @@ class UpdateBottomSheet extends BaseStatelessWidget {
         ),
         IconButton(
           onPressed: () {
-            flaskService.runScraper(website);
+            widget.service.runScraper(widget.website);
+            setState(() {
+              scrapedTime = DateTime.now();
+            });
           },
           icon: const Icon(
             Icons.update,
@@ -76,34 +99,34 @@ class UpdateBottomSheet extends BaseStatelessWidget {
             size: 35,
           ),
         ),
-        EnableWebsiteSwitch(),
+        // EnableWebsiteSwitch(),
       ],
     );
   }
 }
 
-class EnableWebsiteSwitch extends StatefulWidget {
-  const EnableWebsiteSwitch({
-    super.key,
-  });
+// class EnableWebsiteSwitch extends StatefulWidget {
+//   const EnableWebsiteSwitch({
+//     super.key,
+//   });
 
-  @override
-  State<EnableWebsiteSwitch> createState() => _EnableWebsiteSwitchState();
-}
+//   @override
+//   State<EnableWebsiteSwitch> createState() => _EnableWebsiteSwitchState();
+// }
 
-class _EnableWebsiteSwitchState extends State<EnableWebsiteSwitch> {
-  bool isEnable = true;
-  @override
-  Widget build(BuildContext context) {
-    return Switch(
-      value: isEnable,
-      activeColor: ButtonColors.PRIMARY_COLOR,
-      onChanged: (bool value) {
-        setState(() {
-          isEnable = value;
-        });
-        print(isEnable);
-      },
-    );
-  }
-}
+// class _EnableWebsiteSwitchState extends State<EnableWebsiteSwitch> {
+//   bool isEnable = true;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Switch(
+//       value: isEnable,
+//       activeColor: ButtonColors.PRIMARY_COLOR,
+//       onChanged: (bool value) {
+//         setState(() {
+//           isEnable = value;
+//         });
+//         print(isEnable);
+//       },
+//     );
+//   }
+// }

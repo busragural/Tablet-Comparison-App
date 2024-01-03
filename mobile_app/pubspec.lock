@@ -294,6 +294,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  flutter_mobx:
+    dependency: "direct main"
+    description:
+      name: flutter_mobx
+      sha256: "0f0463db8a1582ac88670bea6e4f58ab64a16d701bc7d2c27ea50c1dbe5aecdc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0+1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -444,18 +452,26 @@ packages:
     dependency: "direct main"
     description:
       name: mobx
-      sha256: "537bee828f30a971ffd7d29d8e22bbdec5c9f5899ad4b01f3206a21eeb5c75de"
+      sha256: "6b467f91bfc534922ea670db69a1972d28bd9754085892decb5bce19f2c8d0d5"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
+    version: "2.3.0"
   mobx_codegen:
     dependency: "direct main"
     description:
       name: mobx_codegen
-      sha256: "52a6904b93fa1ceadc5ed4cd67e24fd05a21340d39cff0a213179fc83e179dba"
+      sha256: c9f4be5a67b89f9b90d4c07a0dfa7c368072108061f74d9f09400fe7252cfb84
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.6.0"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   package_config:
     dependency: transitive
     description:
@@ -504,6 +520,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
+  provider:
+    dependency: transitive
+    description:
+      name: provider
+      sha256: "9a96a0a19b594dbc5bf0f1f27d2bc67d5f95957359b461cd9feb44ed6ae75096"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.1"
   pub_semver:
     dependency: transitive
     description:

@@ -5,7 +5,10 @@ import 'package:mobile_app/product/widget/filter_component/price_textfield.dart'
 import '../../constants/utils/color_constants.dart';
 
 class FilterPrice extends BaseStatelessWidget {
-  const FilterPrice({super.key});
+  final TextEditingController leastPriceController;
+  final TextEditingController mostPriceController;
+  const FilterPrice(this.leastPriceController, this.mostPriceController,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +25,15 @@ class FilterPrice extends BaseStatelessWidget {
         ),
         SizedBox(
             height: dynamicHeightDevice(context, 0.15),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Expanded(
-                  child: PriceTextField(hinText: "En az")
-                ),
-                Padding(
+                    child: PriceTextField(
+                  hintText: "En az",
+                  priceController: leastPriceController,
+                )),
+                const Padding(
                   padding: AppPaddings.LARGE_H,
                   child: Text(
                     "-",
@@ -39,8 +44,10 @@ class FilterPrice extends BaseStatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: PriceTextField(hinText: "En az")
-                ),
+                    child: PriceTextField(
+                  hintText: "En çok",
+                  priceController: mostPriceController,
+                )),
               ],
             )),
       ],

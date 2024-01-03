@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../../../screens/home/viewmodel/home_viewmodel.dart';
 import '../../constants/utils/color_constants.dart';
 
 class CustomCheckbox extends StatefulWidget {
+  final HomeViewModel viewModel;
+  final String filterType;
   final String choice;
   const CustomCheckbox({
     super.key,
     required this.choice,
+    required this.filterType,
+    required this.viewModel,
   });
 
   @override
@@ -14,7 +19,6 @@ class CustomCheckbox extends StatefulWidget {
 }
 
 class _CustomCheckboxState extends State<CustomCheckbox> {
-  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -23,24 +27,30 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
           height: 30,
           width: 30,
           child: Checkbox(
-            value: isChecked,
+            value: widget
+                    .viewModel.choiceFilters[widget.filterType.toLowerCase()]![
+                widget.choice.toLowerCase().replaceAll(".", "_")],
             shape: const CircleBorder(),
             activeColor: ButtonColors.CHECKBOX_COLOR,
             onChanged: (bool? value) {
               setState(() {
-                isChecked = value!;
+                widget.viewModel.changeCheckboxFilter(
+                  widget.filterType,
+                  widget.choice,
+                  value!,
+                );
               });
             },
           ),
         ),
         const SizedBox(width: 10),
         Text(
-            widget.choice,
-            style: const TextStyle(
-              color: TextColors.PRIMARY_COLOR,
-              fontSize: 16,
-            ),
+          widget.choice,
+          style: const TextStyle(
+            color: TextColors.PRIMARY_COLOR,
+            fontSize: 16,
           ),
+        ),
       ],
     );
   }

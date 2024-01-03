@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile_app/core/base/state/base_state.dart';
-import 'package:mobile_app/product/widget/column_divider.dart';
+import 'package:mobile_app/product/models/tablet_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../product/constants/utils/border_radius_constants.dart';
 import '../../../product/constants/utils/color_constants.dart';
 import '../../../product/constants/utils/padding_constants.dart';
 
+// ignore: must_be_immutable
 class TabletDetailView extends BaseStatelessWidget {
-  final Uri _url = Uri.parse(
-      "https://www.teknosa.com/apple-ipad-10-nesil-109-wifi-64gb-mavi-tablet-mpq13tua-p-125046643");
-  TabletDetailView({super.key});
+  late Uri _url;
+  final TabletModel tablet;
+  TabletDetailView(this.tablet, {super.key}) {
+    _url = Uri.parse(tablet.link);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +30,14 @@ class TabletDetailView extends BaseStatelessWidget {
             children: [
               Expanded(
                 flex: 3,
-                child: Image.network(
-                  "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTp_w3Y6oO4Cwac1agH0yqvp9nii0wlRF_aUWlNQyciiNarWd3Xpq0WfSx7xcwmCsvopAi3TQF_GpblmFrPbC1nhk0Zv1pbhkKNrFoJ_4UYT7w3q11Oh6QZdA&usqp=CAE",
-                ),
+                child: Image.network(tablet.img),
               ),
               Padding(
                 padding: AppPaddings.MEDIUM_V + AppPaddings.LARGE_H,
-                child: const Text(
-                  "Apple iPad 10. Nesil 10.9\" Wifi 64GB Mavi Tablet MPQ13TU/A",
+                child: Text(
+                  tablet.name,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: TextColors.PRIMARY_COLOR,
                     fontSize: 18,
                   ),
@@ -56,39 +58,43 @@ class TabletDetailView extends BaseStatelessWidget {
                       padding: AppPaddings.SMALL_V + AppPaddings.SMALL_H,
                       child: Row(
                         children: [
-                          Spacer(),
+                          const Spacer(),
                           Expanded(
                             flex: 8,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Teknosa",
+                                  tablet.site,
                                   style: TextStyle(
                                     color: TextColors.BUTTON_TEXT_COLOR,
-                                    fontSize: dynamicHeightDevice(context, 0.028),
+                                    fontSize:
+                                        dynamicHeightDevice(context, 0.028),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Text(
-                                  "11.199 TL",
+                                  NumberFormat.currency(
+                                          locale: 'eu', symbol: "TL")
+                                      .format(tablet.price),
                                   style: TextStyle(
                                     color: TextColors.BUTTON_TEXT_COLOR,
-                                    fontSize: dynamicHeightDevice(context, 0.023),
+                                    fontSize:
+                                        dynamicHeightDevice(context, 0.023),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          Expanded(
+                          const Expanded(
                             child: Icon(
                               Icons.add_shopping_cart_rounded,
                               color: Colors.white,
                               size: 40,
                             ),
                           ),
-                          Spacer()
+                          const Spacer()
                         ],
                       ),
                     ),
@@ -111,46 +117,44 @@ class TabletDetailView extends BaseStatelessWidget {
               ),
               Expanded(
                 flex: 4,
-                child: ListView.builder(
-                  itemCount: 15,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Column(
-                      children: [
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 9,
-                              child: Text(
-                                "Marka:",
-                                style: TextStyle(
-                                  color: TextColors.HIGHLIGHTED_COLOR,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 9,
-                              child: Text(
-                                "Apple",
-                                style: TextStyle(
-                                  color: TextColors.PRIMARY_COLOR,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const ColumnDivider(),
-                      ],
-                    );
-                  },
+                child: Column(
+                  children: [
+                    buildPropertyRow("Boyut", tablet.screenSize, "inç"),
+                  ],
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Row buildPropertyRow(String label, String value, String measureUnit) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          flex: 9,
+          child: Text(
+            label,
+            style: const TextStyle(
+              color: TextColors.HIGHLIGHTED_COLOR,
+              fontSize: 16,
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 9,
+          child: Text(
+            "$value $measureUnit",
+            style: const TextStyle(
+              color: TextColors.PRIMARY_COLOR,
+              fontSize: 16,
+            ),
+          ),
+        ),
+      ],
     );
   }
 

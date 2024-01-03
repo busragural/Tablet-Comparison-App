@@ -4,25 +4,20 @@ import 'package:mobile_app/product/constants/utils/border_radius_constants.dart'
 import 'package:mobile_app/product/constants/utils/padding_constants.dart';
 import 'package:mobile_app/product/navigation/navigation_constants.dart';
 import '../constants/utils/color_constants.dart';
+import '../models/tablet_model.dart';
 
 class TabletCard extends StatelessWidget {
-  final String imageUrl;
-  final String tabletModel;
-  final String ownerWebsite;
-  final double price;
 
+  final TabletModel tablet;
   const TabletCard({
     super.key,
-    required this.imageUrl,
-    required this.tabletModel,
-    required this.ownerWebsite,
-    required this.price,
+    required this.tablet,
   });
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(NavigationConstants.TABLET_DETAIL_VIEW);
+        Navigator.of(context).pushNamed(NavigationConstants.TABLET_DETAIL_VIEW, arguments: tablet);
       },
       customBorder: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -43,7 +38,7 @@ class TabletCard extends StatelessWidget {
             Expanded(
               flex: 5,
               child: Image.network(
-                imageUrl,
+                tablet.img,
               ),
             ),
             const Spacer(),
@@ -53,7 +48,7 @@ class TabletCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    tabletModel,
+                    tablet.name,
                     style: const TextStyle(
                       color: TextColors.PRIMARY_COLOR,
                       fontSize: 16,
@@ -71,7 +66,7 @@ class TabletCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        ownerWebsite,
+                        tablet.site,
                         style: const TextStyle(
                           color: TextColors.PRIMARY_COLOR,
                           fontSize: 16,
@@ -87,7 +82,7 @@ class TabletCard extends StatelessWidget {
                       children: [
                         Text(
                           NumberFormat.currency(locale: 'eu', symbol: "TL")
-                              .format(price),
+                              .format(tablet.price),
                           style: const TextStyle(
                             color: TextColors.SECONDARY_COLOR,
                             fontSize: 20,
