@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobile_app/product/constants/texts/screen_texts.dart';
 import 'package:mobile_app/product/constants/utils/color_constants.dart';
 import 'package:mobile_app/product/constants/utils/padding_constants.dart';
@@ -9,7 +10,10 @@ import 'package:mobile_app/product/widget/custom_search_bar.dart';
 import 'package:mobile_app/product/widget/filter_component/filter_bottom_sheet.dart';
 import 'package:mobile_app/product/widget/tablet_card.dart';
 import 'package:mobile_app/product/widget/update_bottom_sheet.dart';
+import 'package:mobile_app/screens/home/viewmodel/home_viewmodel.dart';
 import 'package:mobile_app/services/firestore.dart';
+
+import '../../../core/base/view/base_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -21,60 +25,51 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final FirestoreService firestoreService = FirestoreService();
   final TextEditingController _searchController = TextEditingController();
-  List _allTablets = [];
-  List _tabletResults = [];
-  int resultCount = 0;
+  final TextEditingController leastPriceController = TextEditingController();
+  final TextEditingController mostPriceController = TextEditingController();
+  late HomeViewModel viewModel;
 
   _searchTablets() {
-    var foundTablets = [];
-
     if (_searchController.text != "") {
-      for (var tabletSnapshot in _allTablets) {
+      viewModel.clearResultTablets();
+      for (var tabletSnapshot in viewModel.filterResults) {
         var name = tabletSnapshot["product_name"].toString().toLowerCase();
         if (name.contains(_searchController.text.toLowerCase())) {
-          foundTablets.add(tabletSnapshot);
+          viewModel.addResultTablets(tabletSnapshot);
         }
       }
     } else {
-      foundTablets = List.from(_allTablets);
+      viewModel.updateResultTablets(viewModel.filterResults);
     }
-
-    setState(() {
-      _tabletResults = foundTablets;
-      resultCount = foundTablets.length;
-    });
-  }
-
-  getTabletStream() async {
-    var data = await firestoreService.getTablets();
-    setState(() {
-      _allTablets = data.docs;
-    });
-    _searchTablets();
   }
 
   @override
   void initState() {
+    viewModel = HomeViewModel();
+    viewModel.getAllTablets().then((value) => viewModel.initTabletLists());
     _searchController.addListener(_searchTablets);
-
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    getTabletStream();
+    _searchTablets();
     super.didChangeDependencies();
   }
 
   @override
-  void dispose() {
-    _searchController.removeListener(_searchTablets);
-    _searchController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return BaseStatefulView<HomeViewModel>(
+      viewModel: viewModel,
+      onModelReady: (model) {
+        model.setContext(context);
+        viewModel = model;
+      },
+      onPageBuilder: (context, value) => buildPage(context),
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  SafeArea buildPage(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -132,7 +127,11 @@ class _HomeViewState extends State<HomeView> {
                           context: context,
                           isScrollControlled: true,
                           builder: (BuildContext context) {
-                            return const FilterBottomSheet();
+                            return FilterBottomSheet(
+                              viewModel: viewModel,
+                              leastPriceController: leastPriceController,
+                              mostPriceController: mostPriceController,
+                            );
                           },
                         );
                       },
@@ -145,37 +144,44 @@ class _HomeViewState extends State<HomeView> {
                   ],
                 ),
               ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "$resultCount sonuç gösteriliyor...",
-                  style: const TextStyle(
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ),
               Expanded(
-                flex: 14,
-                child: ListView.builder(
-                  itemCount: _tabletResults.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    DocumentSnapshot document = _tabletResults[index];
-                    Map<String, dynamic> data =
-                        document.data() as Map<String, dynamic>;
-                    TabletModel tablet = TabletModel.fromJson(data);
-                    tablet.setId(document.id);
-                    return Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: TabletCard(
-                        imageUrl: tablet.img,
-                        tabletModel: tablet.name,
-                        ownerWebsite: tablet.site,
-                        price: tablet.price,
+                flex: 15,
+                child: Observer(builder: (_) {
+                  return Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "${viewModel.resultCount} sonuç gösteriliyor...",
+                          style: const TextStyle(
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
                       ),
-                    );
-                  },
-                ),
-              ),
+                      Expanded(
+                        flex: 14,
+                        child: ListView.builder(
+                          itemCount: viewModel.resultTablets.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            DocumentSnapshot document =
+                                viewModel.resultTablets[index];
+                            Map<String, dynamic> data =
+                                document.data() as Map<String, dynamic>;
+                            TabletModel tablet = TabletModel.fromJson(data);
+                            tablet.setId(document.id);
+                            return Padding(
+                              padding: EdgeInsets.only(top: 8),
+                              child: TabletCard(
+                                tablet: tablet,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+              )
             ],
           ),
         ),

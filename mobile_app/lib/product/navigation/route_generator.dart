@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/product/models/tablet_model.dart';
 import 'package:mobile_app/screens/tablet_detail/view/tablet_detail_view.dart';
 import 'navigation_constants.dart';
 import '../../screens/home/view/home_view.dart';
@@ -12,13 +13,13 @@ class RouteGenerator {
   }
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    // final args = settings.arguments;
 
     switch (settings.name) {
       case NavigationConstants.HOME_VIEW:
         return MaterialPageRoute(builder: (_) => const HomeView());
       case NavigationConstants.TABLET_DETAIL_VIEW:
-        return MaterialPageRoute(builder: (_) => TabletDetailView());
+        final args = settings.arguments as TabletModel;
+        return MaterialPageRoute(builder: (_) => TabletDetailView(args));
       default:
         return _errorRoute();
     }

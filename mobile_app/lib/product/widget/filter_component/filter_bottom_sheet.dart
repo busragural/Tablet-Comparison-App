@@ -4,11 +4,16 @@ import 'package:mobile_app/product/constants/utils/padding_constants.dart';
 import 'package:mobile_app/product/widget/custom_filled_button.dart';
 import 'package:mobile_app/product/widget/column_divider.dart';
 import 'package:mobile_app/product/widget/filter_component/filter_price.dart';
+import 'package:mobile_app/screens/home/viewmodel/home_viewmodel.dart';
 import '../../constants/utils/color_constants.dart';
 import 'filter_multiple_checkbox.dart';
 
 class FilterBottomSheet extends BaseStatelessWidget {
-  const FilterBottomSheet({super.key});
+  final HomeViewModel viewModel;
+  final TextEditingController leastPriceController;
+  final TextEditingController mostPriceController;
+  const FilterBottomSheet({required this.leastPriceController, required this.mostPriceController,
+      required this.viewModel, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,30 +37,44 @@ class FilterBottomSheet extends BaseStatelessWidget {
         padding: AppPaddings.LARGE_V + AppPaddings.MEDIUM_H,
         child: Column(
           children: [
-            const Expanded(
+            Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    FilterPrice(),
-                    ColumnDivider(),
+                    FilterPrice(leastPriceController, mostPriceController),
+                    const ColumnDivider(),
                     FilterMultipleCheckbox(
+                      viewModel: viewModel,
                       filterType: "Marka",
-                      choices: [
-                        "Apple", "Samsung", "Huawei", "Vestel", "Xiomi", "Lenovo", "Casper", "Oppo"
+                      choices: const [
+                        "Apple",
+                        "Samsung",
+                        "Huawei",
+                        "Xiomi",
+                        "Lenovo",
+                        "Casper",
                       ],
                     ),
-                    ColumnDivider(),
+                    const ColumnDivider(),
                     FilterMultipleCheckbox(
+                      viewModel: viewModel,
                       filterType: "Boyut",
-                      choices: [
-                        "10.9", "11", "12.4", "8", "11.7",
+                      choices: const [
+                        "10.9 inç",
+                        "11 inç",
+                        "12.9 inç",
+                        "8 inç",
+                        "11.7 inç",
                       ],
                     ),
-                    ColumnDivider(),
+                    const ColumnDivider(),
                     FilterMultipleCheckbox(
-                      filterType: "Renk",
-                      choices: [
-                        "Siyah", "Gri", "Beyaz", "Pembe", "Mor", "Kırmızı", "Mavi", "Gümüş"
+                      viewModel: viewModel,
+                      filterType: "Site",
+                      choices: const [
+                        "Vatan",
+                        "Mediamarkt",
+                        "Teknosa",
                       ],
                     ),
                   ],
@@ -72,7 +91,11 @@ class FilterBottomSheet extends BaseStatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
-                onTap: () {},
+                onTap: () {
+                  viewModel.filterTablets(
+                      leastPriceController, mostPriceController);
+                  Navigator.pop(context);
+                },
               ),
             )
           ],

@@ -24,8 +24,8 @@ class TabletModel {
   TabletModel.fromJson(Map<String, dynamic> json) {
     _name = json['product_name'];
     _link = json['link'];
-    _site = json['site'];
-    _screenSize = "10";
+    _site = "${json['site'][0].toUpperCase()}${json['site'].substring(1)}";
+    _screenSize = json['screenSize'];
     _img = json['product_img'];
     _price = double.parse(json['product_price'].toString().split(' ')[0].replaceAll(".", ""));
   }

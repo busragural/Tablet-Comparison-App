@@ -3,21 +3,23 @@ import 'package:flutter/material.dart';
 import '../../constants/utils/color_constants.dart';
 
 class PriceTextField extends StatelessWidget {
-  final String hinText;
+  final String hintText;
+  final TextEditingController priceController;
   const PriceTextField({
     super.key,
-    required this.hinText,
+    required this.hintText, required this.priceController,
   });
 
   @override
   Widget build(BuildContext context) {
-    return const TextField(
+    return TextField(
+      controller: priceController,
       textAlign: TextAlign.center,
       decoration: InputDecoration(
-        hintText: "En az",
-        hintStyle: TextStyle(color: TextColors.HINT_COLOR),
+        hintText: hintText,
+        hintStyle: const TextStyle(color: TextColors.HINT_COLOR),
         suffixText: "TL",
-        enabledBorder: UnderlineInputBorder(
+        enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: BorderColors.TEXTFIELD_COLOR)
         )
       ),
