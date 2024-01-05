@@ -101,28 +101,29 @@ class TabletDetailView extends BaseStatelessWidget {
                   ),
                 ),
               ),
-              const Padding(
-                padding: AppPaddings.MEDIUM_V,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Özellikler",
-                    style: TextStyle(
-                      color: TextColors.PRIMARY_COLOR,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: Column(
-                  children: [
-                    buildPropertyRow("Boyut", tablet.screenSize, "inç"),
-                  ],
-                ),
-              ),
+              const Expanded(flex: 4, child: Center()),
+              // const Padding(
+              //   padding: AppPaddings.MEDIUM_V,
+              //   child: Align(
+              //     alignment: Alignment.centerLeft,
+              //     child: Text(
+              //       "Özellikler",
+              //       style: TextStyle(
+              //         color: TextColors.PRIMARY_COLOR,
+              //         fontWeight: FontWeight.bold,
+              //         fontSize: 24,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // Expanded(
+              //   flex: 4,
+              //   child: Column(
+              //     children: [
+              //       buildPropertyRow("Boyut", tablet.screenSize, "inç"),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),

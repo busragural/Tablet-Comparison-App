@@ -77,7 +77,16 @@ class _HomeViewState extends State<HomeView> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           scrolledUnderElevation: 0,
-          actions: [
+          actions: [IconButton(
+              onPressed: () {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const HomeView()));
+              },
+              icon: const Icon(
+                Icons.system_security_update_rounded,
+                color: AssetColors.SECONDARY_COLOR,
+                size: 35,
+              ),
+            ),
             IconButton(
               onPressed: () {
                 showModalBottomSheet(

@@ -5,7 +5,7 @@ class FlaskService {
   Future<void> runScraper(String scraperName) async {
     try {
       final response = await http.post(
-        Uri.parse('http://10.4.109.235:5000/run_scraper'),
+        Uri.parse('http://192.168.146.8:5000/run_scraper'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
